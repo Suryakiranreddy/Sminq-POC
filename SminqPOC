@@ -1,0 +1,260 @@
+package enh.android.pages;
+import org.openqa.selenium.By;
+import org.testng.Assert;
+import utilities.HtmlReportUtil;
+import utilities.LogUtil;
+import utilities.MobileKeywords;
+public class SminqHomePage extends MobileKeywords
+{
+/*
+* In this method we are going to sign in through mobile number,
+* post a picture with location and post mood of the picture.
+*
+*/
+public static void sminqPostAPicture() throws InterruptedException
+{
+/*
+* Log
+*/
+HtmlReportUtil.stepInfo("'sminqPostAPicture' method started");
+LogUtil.infoLog(MobileKeywords.class, "'sminqPostAPicture' method started");
+/*
+* This method allows to click "allow" button for location access
+*/
+click(SminqLocators.allow);
+HtmlReportUtil.stepInfo("Clicked on allow button for location access");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on allow button for location access");
+/*
+* This method is used to signing in to the application using mobile number
+*/
+signInViaMobile();
+/*
+* This method is used to post a picture in profile page
+*/
+postPicture();
+/*
+* After posting picture, this method allows to click on profile icon to refresh
+*/
+click(SminqLocators.profileIcon);
+HtmlReportUtil.stepInfo("Clicked on profile icon");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on profile icon");
+/*
+* This method allows to click on home icon to refresh
+*/
+click(SminqLocators.homeIcon);
+HtmlReportUtil.stepInfo("Clicked on home icon");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on home icon");
+/*
+* This method allows to click on profile icon to display user info - name and location
+*/
+click(SminqLocators.profileIcon);
+HtmlReportUtil.stepInfo("Clicked on profile icon");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on profile icon");
+// Storing user information
+String userInformation = getElementText(SminqLocators.userInfo);
+HtmlReportUtil.stepInfo("User Information :- "+userInformation);
+LogUtil.infoLog(MobileKeywords.class, "User Information :- "+userInformation);
+// Storing user name
+String userName = getElementText(SminqLocators.userName);
+HtmlReportUtil.stepInfo("User Name :- "+userName);
+LogUtil.infoLog(MobileKeywords.class, "User Name :- "+userName);
+// Here we are storing expectedUserName, actualUserName for verification
+String expectedUserName = "Surya Kiran";
+String actualUserName = userName;
+// After getting data for verification, doing assertion for user name verification
+Assert.assertTrue(expectedUserName.contains(actualUserName));
+HtmlReportUtil.stepInfo("User Name :- "+userName +" matched");
+LogUtil.infoLog(MobileKeywords.class, "User Name :- "+userName +" matched");
+// Here we are getting number of locations which we have posted
+int numOfLocations = iosDriver.findElements(SminqLocators.numOfLocations).size();
+HtmlReportUtil.stepInfo(numOfLocations + " we posted");
+LogUtil.infoLog(MobileKeywords.class, numOfLocations + " we posted");
+// Storing all location names
+for (int j = 1; j <= numOfLocations; j++)
+{
+String locationName = iosDriver.findElement(By.xpath(
+"//XCUIElementTypeApplication[@name=\"Sminq\"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell["
++ j
++ "]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeStaticText"))
+.getText();
+HtmlReportUtil.stepInfo("Name of the location " + j+ " :- "+locationName);
+LogUtil.infoLog(MobileKeywords.class, "Name of the location " + j+ " :- "+locationName);
+// Here we are storing expectedLocationName, actualLocationName for verification
+String expectedLocationName="Jeevan Scientific Technology Ltd.";
+String actualLocationName=locationName;
+// After getting data for verification, doing assertion for location name verification
+Assert.assertTrue(expectedLocationName.contains(actualLocationName));
+HtmlReportUtil.stepInfo("Location Name :- "+locationName +" matched");
+LogUtil.infoLog(MobileKeywords.class, "location Name :- "+locationName +" matched");
+}
+/*
+* Click on first post to verify whether your post is posted or not
+*/
+click(SminqLocators.post1);
+HtmlReportUtil.stepInfo("Clicked on first post");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on first post");
+//'sminqPostAPicture' method has been ended
+HtmlReportUtil.stepInfo("'sminqPostAPicture' method ended");
+LogUtil.infoLog(MobileKeywords.class, "'sminqPostAPicture' method ended");
+}
+/*
+* This method is used to signing in to the application using mobile number
+*/
+public static void signInViaMobile() throws InterruptedException
+{
+/*
+* This method allows to click on 'sign in via mobile' button
+*/
+click(SminqLocators.signIn);
+HtmlReportUtil.stepInfo("Clicked on SIGN IN VIA MOBILE");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on SIGN IN VIA MOBILE");
+/*
+* This method allows to click on 'country code' drop down
+*/
+click(SminqLocators.countryCodeLabel);
+HtmlReportUtil.stepInfo("Clicked on country code drop down");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on country code drop down");
+//scroll the screen up till +91 country code is found
+for (int i = 0; i <= 15; i++)
+{
+try
+{
+/*
+* If country code is found
+*/
+if (iosDriver.findElement(By.id("country_code_cell_" + SminqLocators.countryCode + "")).isDisplayed())
+{
+/*
+* This method allows to click on country code +91
+*/
+click(SminqLocators.countryCodeCell91);
+HtmlReportUtil.stepInfo("Selected county code "+SminqLocators.countryCode);
+LogUtil.infoLog(MobileKeywords.class, "Selected county code "+SminqLocators.countryCode);
+break;
+} else
+{
+/*
+* If country code is not found scroll the screen up
+*/
+swipeUp();
+}
+} catch (Exception e)
+{
+/*
+* If country code is not found scroll the screen up
+*/
+swipeUp();
+}
+}
+/*
+* This method allows to enter the phone number
+*/
+sendkeys(SminqLocators.phoneTextField, SminqLocators.mobile);
+HtmlReportUtil.stepInfo(SminqLocators.mobile+" entered phone_number_textfield ");
+LogUtil.infoLog(MobileKeywords.class, SminqLocators.mobile+" entered phone_number_textfield ");
+/*
+* This method allows to click on next button after entering the phone number
+*/
+click(SminqLocators.nextButton);
+HtmlReportUtil.stepInfo("clicked on next button after entering phone number ");
+LogUtil.infoLog(MobileKeywords.class, "clicked on next button after entering phone number ");
+//Wait for 50 seconds to enter OTP
+Thread.sleep(50000);
+/*
+* This method allows to click on next button after entering OTP
+*/
+click(SminqLocators.nextButton);
+HtmlReportUtil.stepInfo("clicked on next button after entering OTP ");
+LogUtil.infoLog(MobileKeywords.class, "clicked on next button after entering OTP ");
+}
+/*
+* This method is used to post a picture in profile page
+*/
+public static void postPicture() throws InterruptedException
+{
+/*
+* This method allows to click on 'GIVE LOCATION PERMISSION' button
+*/
+click(SminqLocators.giveLocalPermision);
+HtmlReportUtil.stepInfo("Clicked on GIVE LOCATION PERMISSION");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on GIVE LOCATION PERMISSION");
+/*
+* This method allows to click on 'Allow' button for location permission
+*/
+click(SminqLocators.allow);
+HtmlReportUtil.stepInfo("Clicked on allow button for location permission");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on allow button for location permission");
+/*
+* This method allows to click on camera icon to post a picture
+*/
+click(SminqLocators.iconAddPost);
+HtmlReportUtil.stepInfo("Clicked on camera icon for post a picture");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on camera icon for post a picture");
+/*
+* This method allows to click on 'OK' button to access camera
+*/
+click(SminqLocators.ok);
+HtmlReportUtil.stepInfo("Clicked on ok button");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on ok button");
+/*
+* This method allows to click on 'ENABLE CAMERA ACCESS' button
+*/
+click(SminqLocators.enableCameraAccess);
+HtmlReportUtil.stepInfo("Clicked on ENABLE CAMERA ACCESS");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on ENABLE CAMERA ACCES");
+/*
+* This method allows to click on 'OK' button to ENABLE CAMERA ACCESS
+*/
+click(SminqLocators.ok);
+HtmlReportUtil.stepInfo("Clicked on ok button for ENABLE CAMERA ACCESS");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on ok button for ENABLE CAMERA ACCESS");
+/*
+* This method allows to click on 'ENABLE MICROPHONE ACCESS' button
+*/
+click(SminqLocators.enableMicroPhoneAccess);
+HtmlReportUtil.stepInfo("Clicked on ENABLE MICROPHONE ACCESS");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on ENABLE MICROPHONE ACCESS");
+/*
+* This method allows to click on 'OK' button to ENABLE MICROPHONE ACCESS
+*/
+click(SminqLocators.ok);
+HtmlReportUtil.stepInfo("Clicked on ok button for ENABLE MICROPHONE ACCESS");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on ok button for ENABLE MICROPHONE ACCESS");
+/*
+* This method allows to click on camera icon to take a picture for posting
+*/
+click(SminqLocators.cameraIcon);
+HtmlReportUtil.stepInfo("Clicked on camera icon");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on camera icon");
+/*
+* This method allows to enter location name
+*/
+sendkeys(SminqLocators.searchLocationName, SminqLocators.locationName);
+HtmlReportUtil.stepInfo("Entered "+ SminqLocators.locationName +" location name");
+LogUtil.infoLog(MobileKeywords.class, "Entered "+ SminqLocators.locationName +" location name");
+/*
+* This method allows to select location name in the location drop down
+*/
+click(SminqLocators.selectLocation);
+HtmlReportUtil.stepInfo("Selected "+ SminqLocators.locationName +" location name");
+LogUtil.infoLog(MobileKeywords.class, "Selected "+ SminqLocators.locationName +" location name");
+/*
+* This method allows to select mood icon for the post
+*/
+click(SminqLocators.moodIcon);
+HtmlReportUtil.stepInfo("mood icon selected");
+LogUtil.infoLog(MobileKeywords.class, "mood icon selected");
+/*
+* This method allows to select sticker icon for the post
+*/
+click(SminqLocators.sticker);
+HtmlReportUtil.stepInfo("sticker icon selected");
+LogUtil.infoLog(MobileKeywords.class, "sticker icon selected");
+/*
+* This method allows to click on 'POST' button
+*/
+click(SminqLocators.post);
+HtmlReportUtil.stepInfo("Clicked on post button");
+LogUtil.infoLog(MobileKeywords.class, "Clicked on post button");
+}
+}
